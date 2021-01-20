@@ -1,76 +1,26 @@
 <template>
-  <div id="app" class="small-container">
-    <h1>Employees</h1>
-    <employee-form @add:employee= "addEmployee" />
-    <employee-table :employees= "employees"
-                    @delete:employee = "deleteEmployee"
-                    @edit:employee= "editEmployee"
-    />
-  </div>
+      <BasicLayout />
 </template>
 
 <script>
-import EmployeeTable from './components/EmployeeTable.vue'
-import EmployeeForm from './components/EmployeeForm.vue'
+import BasicLayout from './layouts/BasicLayout.vue'
+
 
 export default {
-  name: 'App',
+  name: 'LayoutDefault',
+
   components: {
-    EmployeeTable,
-    EmployeeForm,
+    BasicLayout
   },
-  data() {
+
+  data () {
     return {
 
-      employees: [
-        {
-          id: 1,
-          name: 'Richard Hendricks',
-          email: 'richard@piedpiper.com',
-        },
-        {
-          id: 2,
-          name: 'Bertram Gilfoyle',
-          email: 'gilfoyle@piedpiper.com',
-        },
-        {
-          id: 3,
-          name: 'Dinesh Chugtai',
-          email: 'dinesh@piedpiper.com',
-        },
-      ],
     }
-  },
- 
-  methods: {
-    addEmployee(employee) {
-      console.log(employee)
-      const lastId =
-        this.employees.length > 0
-          ? this.employees[this.employees.length - 1].id
-          : 0;
-      const id = lastId + 1;
-      const newEmployee = { ...employee, id };
-      this.employees = [...this.employees, newEmployee]
-    },
-    deleteEmployee(id) {
-    this.employees = this.employees.filter(
-      employee => employee.id !== id
-      )
-    },
-    editEmployee(id, updatedEmployee) {
-        this.employees = this.employees.map(employee =>
-          employee.id === id ? updatedEmployee : employee
-        )
-      } 
   }
 }
 </script>
 
 <style>
-
-  .small-container {
-    text-align: center;
-  }
- 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
 </style>
