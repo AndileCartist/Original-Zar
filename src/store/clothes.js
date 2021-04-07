@@ -2,12 +2,16 @@
   men: [],
   women: [],
   kids: [],
+  searchResult: [],
   brands: []
 })
 
 const mutations = {
   addWomenClothes(state, cloth) {
     state.women.push(cloth)
+  },
+  addSearchResults(state, cloth) {
+    state.searchResult.push(cloth)
   },
   addMenClothes(state, cloth) {
     state.men.push(cloth)
@@ -29,7 +33,10 @@ const mutations = {
   },
   emptyListBrands(state) {
     state.brands = []
-  }
+  },
+  emptySearch(state) {
+    state.searchResult = []
+  },
 }
 
  const getters = {
@@ -43,7 +50,14 @@ const mutations = {
     return state.kids;
   },
   brandsClothes (state) {
-    return state.brands;
+   let men = state.men.filter(n => n.onSale === true);
+   let women = state.women.filter(n => n.onSale === true);
+   let kids = state.kids.filter(n => n.onSale === true);
+   let brands = [] 
+    return brands.concat(men,women, kids);
+  },
+  search (state) {
+    return state.searchResult;
   }
 }
 

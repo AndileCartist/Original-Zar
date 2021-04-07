@@ -6,7 +6,7 @@
       reveal
       elevated
       @reveal="handleReveal"
-      class="bg-pink-10 q-pa-xs text-white animate"
+      class="bg-grey-9 q-pa-xs text-white animate"
       :class="isRevealed ? 'revealed' : 'not-revealed'"
       height-hint="98"
     >
@@ -22,7 +22,7 @@
 
         <q-toolbar-title
           class="gt-sm"
-          style="min-height: 150px; margin-left: 30px;"
+          style="max-height: 135px; margin-left: 30px;"
         >
           <q-avatar style="min-height: inherit;font-size: 150px;">
             <router-link class="top-logo " :to="{ name: 'home' }" tag="a">
@@ -35,7 +35,7 @@
           <q-responsive
             :ratio="16 / 9"
             style="max-height: 150px; margin-left: 35%;
-    margin-top: 5%;"
+            margin-top: 5%;"
           >
             <router-link class="top-logo-2" :to="{ name: 'home' }" tag="a">
               <img class="top-logo-2" src="../assets/index.svg" />
@@ -46,45 +46,62 @@
         <q-space />
         <div style="min-width: 300px;" class="gt-sm">
           <q-input
+            style="cursor: pointer;"
             dark
             placeholder="Search..."
             borderless
             v-model="search"
             color="grey-1"
             type="search"
+            @keyup.enter="getSearch()"
           >
             <template v-slot:append>
-              <q-icon name="search" />
+              <q-icon @click="getSearch()" name="search" />
             </template>
           </q-input>
         </div>
         <q-space />
+
+        <router-link
+          :to="{ name: 'cart' }"
+          tag="a"
+          style="margin-right: 25px;
+                font-size: 20px;
+                text-decoration: none;
+                color: whitesmoke;
+                display: flex;
+                justify-content: flex-end;
+                min-width: 70px;"
+        >
+          <!--  <font-awesome-icon :icon="['fas', 'shopping-cart']"
+        /> -->
+          <img
+            src="../assets/iconfinder_00-ELASTOFONT-STORE-READY_cart_2703080.svg"
+            alt="cart"
+            style=" width: 25%;"
+          />
+        </router-link>
         <div class=" q-gutter-md gt-sm">
           <div v-if="userData === null">
             <router-link :to="{ name: 'signin' }" tag="a" class="sign-in-btn">
-            <q-btn outline class="grey-1 q-pa-xs" label=" Sign In" />
-          </router-link>
+              <q-btn outline class="grey-1 q-pa-xs" label=" Sign In" />
+            </router-link>
 
             <router-link :to="{ name: 'signup' }" tag="a" class="sign-in-btn">
-            <q-btn outline class="grey-1 q-pa-xs q-ml-md" label="Sign Up" />
-          </router-link>
+              <q-btn outline class="grey-1 q-pa-xs q-ml-md" label="Sign Up" />
+            </router-link>
           </div>
 
-          <div  v-if="userData !== null">
+          <div v-if="userData !== null">
             <h5 class="user-name">{{ userName }}</h5>
-            <q-btn outline @click="logout" class="grey-1 q-pa-xs q-mr-md" label="Log Out" />
+            <q-btn
+              outline
+              @click="logout"
+              class="grey-1 q-pa-xs q-mr-md"
+              label="Log Out"
+            />
           </div>
-
-         
         </div>
-        <q-btn
-          dense
-          flat
-          round
-          icon="menu"
-          class="lt-md"
-          @click="right = !right"
-        />
       </q-toolbar>
 
       <q-tabs
@@ -102,7 +119,7 @@
       </q-tabs>
 
       <div class="absolute fill-content">
-        <q-tab-panels @click="removeTabPanels()"
+        <q-tab-panels
           v-model="tab"
           animated
           class="bg-grey-4 text-white text-center"
@@ -110,7 +127,9 @@
         >
           <q-tab-panel name="women">
             <div class="wrap">
-              <tab-links :links="womenNavLinks" />
+              <div @click="removeTabPanels()">
+                <tab-links :links="womenNavLinks" />
+              </div>
               <div
                 v-for="(post, index) in women.slice(0, 3)"
                 v-bind:item="post"
@@ -118,6 +137,7 @@
                 v-bind:key="post.imagePath"
               >
                 <card-component
+                  :item="post"
                   :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
@@ -128,7 +148,10 @@
 
           <q-tab-panel name="men">
             <div class="wrap">
-              <tab-links :links="menNavLinks" />
+              <div @click="removeTabPanels()">
+                <tab-links :links="menNavLinks" />
+              </div>
+
               <div
                 v-for="(post, index) in men.slice(0, 3)"
                 v-bind:item="post"
@@ -136,6 +159,7 @@
                 v-bind:key="post.imagePath"
               >
                 <card-component
+                  :item="post"
                   :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
@@ -146,7 +170,10 @@
 
           <q-tab-panel name="kids">
             <div class="wrap">
-              <tab-links :links="kidsNavLinks" />
+              <div @click="removeTabPanels()">
+                <tab-links :links="kidsNavLinks" />
+              </div>
+
               <div
                 v-for="(post, index) in kids.slice(0, 3)"
                 v-bind:item="post"
@@ -154,6 +181,7 @@
                 v-bind:key="post.imagePath"
               >
                 <card-component
+                  :item="post"
                   :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
@@ -164,7 +192,9 @@
 
           <q-tab-panel name="brands">
             <div class="wrap">
-              <tab-links :links="brandsNavLinks" />
+              <div>
+                <tab-links @click="removeTabPanels()" :links="brandsNavLinks" />
+              </div>
               <div
                 v-for="(post, index) in getBestBrands"
                 v-bind:item="post"
@@ -172,6 +202,7 @@
                 v-bind:key="post.imagePath"
               >
                 <card-component
+                  :item="post"
                   :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
@@ -194,9 +225,14 @@
       <!-- drawer content -->
 
       <div style="" class="q-ml-sm q-mr-xs">
-        <q-input placeholder="Search..." v-model="search" type="search">
+        <q-input
+          @keyup.enter="getSearch()"
+          placeholder="Search..."
+          v-model="search"
+          type="search"
+        >
           <template v-slot:append>
-            <q-icon name="search" />
+            <q-icon @click="getSearch()" name="search" />
           </template>
         </q-input>
       </div>
@@ -242,15 +278,13 @@
       </router-link>
     </q-drawer>
 
-    <q-drawer v-model="right" side="right" class="lt-md" overlay elevated>
-      <!-- drawer content -->
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
+    <q-page-container @click="removeTabPanels()">
+      <transition>
+        <router-view></router-view>
+      </transition>
     </q-page-container>
 
-    <q-footer  class="bg-grey-8 text-white">
+    <q-footer class="bg-grey-8 text-white">
       <footer class="footer-distributed">
         <div class="footer-left">
           <h3>About OriginalZar</h3>
@@ -260,9 +294,14 @@
             brands to Africa, OriginalZar was born. Our pride is your joy in
             physically expressing your fashion senses.
           </p>
-          <div>
-            <i class="fa fa-phone"></i>
-            <p>031 524 5659</p>
+          <div class="phone">
+            <font-awesome-icon
+              :icon="['fas', 'phone-alt']"
+              class="font-icon"
+              id="phone"
+              style="font-size: 16px; margin-right: 5px;"
+            />
+            <p style="display: inline-block">031 524 5659</p>
           </div>
           <div>
             <i class="fa fa-envelope"></i>
@@ -271,10 +310,24 @@
             </p>
           </div>
           <div class="footer-icons">
-            <a href="#"><i class="fa fa-facebook"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <a href="#"><i class="fa fa-github"></i></a>
+            <a href="#"
+              ><font-awesome-icon
+                :icon="['fab', 'facebook-square']"
+                class="facebook"
+            /></a>
+            <a href="#"
+              ><font-awesome-icon
+                :icon="['fab', 'twitter-square']"
+                class="twitter"
+            /></a>
+            <a href="#"
+              ><font-awesome-icon
+                :icon="['fab', 'instagram-square']"
+                class="instagram"
+            /></a>
+            <a href="#"
+              ><font-awesome-icon :icon="['fas', 'envelope']" class="envelope"
+            /></a>
           </div>
           <!--      <p class="footer-links">
             <a href="#">Home</a>
@@ -299,7 +352,7 @@
             BE IN THE KNOW, Promotions, new products and sales. Directly to your
             inbox.
           </p>
-          <div style="height: 46px; width: 240px; margin: auto;">
+          <div class="email-input">
             <q-input
               class="q-mt-lg"
               dark
@@ -338,9 +391,9 @@
 import CardComponent from "../components/CardComponent.vue";
 import TabLinks from "../components/TabLinks.vue";
 import axios from "axios";
+import Cookies from "js-cookie";
 const apiUrl = process.env.API_URL || "http://localhost:1337";
-import { mapGetters, mapMutations } from 'vuex'
-
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   components: {
@@ -364,7 +417,7 @@ export default {
       signedIn: false,
       isRevealed: true,
       womenNavLinks: [
-        { dest: "/women/all", name: "ALL" },
+        { dest: "/women/all/", name: "ALL" },
         { dest: "/women/dresses", name: "Dresses" },
         { dest: "/women/footware", name: "Footware" },
         { dest: "/women/formal-wear", name: "Formal Wear" },
@@ -375,11 +428,12 @@ export default {
       ],
       menNavLinks: [
         { dest: "/men/all", name: "ALL" },
-        { dest: "/men/footware", name: "Footware" },
+        { dest: "/women/footware", name: "Footware" },
         { dest: "/men/formal-wear", name: "Formal Wear" },
         { dest: "/men/jackets", name: "Jackets" },
         { dest: "/men/jeans", name: "Jeans" },
         { dest: "/men/tops", name: "Tops" },
+        { dest: "/men/shorts", name: "Shorts" },
       ],
       kidsNavLinks: [
         { dest: "/kids/all", name: "ALL" },
@@ -401,13 +455,11 @@ export default {
         { dest: "/brands/skirts", name: "Skirts" },
         { dest: "/brands/tops", name: "Tops" },
       ],
+      searchResults: [],
     };
   },
   computed: {
-    ...mapGetters([
-      'userData',
-      'userName'
-    ]),
+    ...mapGetters(["userData", "userName"]),
 
     getBestBrands() {
       let men = this.men.reduce(
@@ -430,6 +482,7 @@ export default {
 
   async created() {
     try {
+      //this.getUserData();
       this.fetchWomenData();
       // this.women = await this.getFemaleImages();
       this.fetchMenData();
@@ -445,16 +498,42 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['logout']),
+    ...mapMutations(["logout", "setUser"]),
+    getUserData() {
+      //  let cart2 = [];
+      let user = Cookies.get("user");
+      if (this.userData === null) {
+        if (user !== null) {
+          this.setUser(JSON.parse(user));
+        }
+      }
+    },
+    async getSearch() {
+      try {
+        if (this.search.length < 2) {
+          return;
+        } else {
+          this.$store.commit("emptySearch");
+          const res = await axios.get(`${apiUrl}/women?_q=${this.search}`);
+          const res1 = await axios.get(`${apiUrl}/men?_q=${this.search}`);
+          const res2 = await axios.get(`${apiUrl}/kids?_q=${this.search}`);
+          let searchResults = res.data.concat(res1.data, res2.data);
+          searchResults.forEach((search) => {
+            return this.$store.commit("addSearchResults", { ...search });
+          });
+          this.search = "";
+          return this.$router.push({ name: "search-page" });
+        }
+      } catch (error) {
+        this.error = error.message;
+      }
+    },
 
     handleReveal(isRevealed) {
       this.isRevealed = isRevealed;
       //do something else if you want
     },
     getImage(imagePath) {
-      // let imageurl = imagePath.replace(/[a-z]+([0-9]?)+.jpg/i, "");
-      //   let image = imagePath.replace(/[a-z]+\//gi, "");
-      // console.log(post.imagePath);
       return require(`@/assets/${imagePath}`);
     },
 
@@ -464,7 +543,7 @@ export default {
         // this.$store.commit("emptyListWomen");
         //     const response = await strapi.login(this.email, this.password)
         const { data } = await axios.get(`${apiUrl}/women`);
-        console.log(data);
+        // console.log(data);
 
         this.women = data;
         data.forEach((woman) => {
@@ -482,7 +561,7 @@ export default {
         this.$store.commit("emptyListMen");
         //     const response = await strapi.login(this.email, this.password)
         const { data } = await axios.get(`${apiUrl}/men`);
-        console.log(data);
+        //  console.log(data);
         data.forEach((man) => {
           return this.$store.commit("addMenClothes", { ...man });
         });
@@ -499,7 +578,7 @@ export default {
         this.$store.commit("emptyListKids");
         //     const response = await strapi.login(this.email, this.password)
         const { data } = await axios.get(`${apiUrl}/kids`);
-        console.log(data);
+        //    console.log(data);
         data.forEach((kid) => {
           return this.$store.commit("addKidsClothes", { ...kid });
         });
@@ -538,7 +617,7 @@ export default {
   width: 133px;
 }
 .top-logo-2 {
-  width: 105px;
+  width: 88px;
   position: relative;
   left: 2%;
 }
@@ -713,7 +792,7 @@ export default {
   width: 35px;
   height: 35px;
   cursor: pointer;
-  background-color: #33383b;
+
   border-radius: 2px;
 
   font-size: 20px;
@@ -721,8 +800,13 @@ export default {
   text-align: center;
   line-height: 35px;
 
-  margin-right: 3px;
+  margin-right: 12px;
   margin-bottom: 5px;
+}
+.imail-input {
+  height: 46px;
+  width: 240px;
+  margin: auto;
 }
 
 @media (max-width: 880px) {
@@ -743,7 +827,19 @@ export default {
     margin-left: 0;
   }
 }
+@media only screen and (min-width: 406px) {
+  .top-logo-2 {
+    width: 105px;
+    position: relative;
+    left: 2%;
+  }
+}
 
+@media only screen and (min-width: 1028px) {
+  .imail-input {
+    width: 320px;
+  }
+}
 .wrapper {
   position: relative;
   bottom: 20%;
@@ -808,10 +904,32 @@ export default {
 
 .user-name {
   margin-top: 0px;
-    margin-bottom: 0px;
-    display: inline-block;
-    margin-right: 15px;
-    font-style: italic;
-     font-family: 'Playfair Display', serif;
+  margin-bottom: 0px;
+  display: inline-block;
+  margin-right: 15px;
+  font-style: italic;
+  font-family: "Playfair Display", serif;
+}
+.svg-inline--fa.fa-w-14,
+.svg-inline--fa.fa-w-16 {
+  width: 100%;
+  height: 100%;
+}
+.phone > .svg-inline--fa.fa-w-16 {
+  font-size: 16px;
+  margin-right: 5px;
+  width: 1em;
+}
+.facebook {
+  color: #3a5895;
+}
+.twitter {
+  color: #1c9deb;
+}
+.instagram {
+  color: #faf2f6;
+}
+.envelope {
+  color: #a6d3e0;
 }
 </style>

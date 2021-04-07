@@ -7,7 +7,7 @@
               <a href="#"><span>Hover Me!</span></a>
             </div>
             <img
-              src="https://images.unsplash.com/photo-1564400143768-2f8ea3f310f3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=984&q=80"
+              :src="getImage(firstImg)"
               class="scale-2"
               style="width: 100%; height: 100%;"
               alt=""
@@ -20,7 +20,7 @@
               <a href="#"><span>Hover Me!</span></a>
             </div> 
             <img
-              src="https://images.unsplash.com/photo-1596827893769-75feedfbec29?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTkyfHxwYW50c3xlbnwwfDJ8MHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+              :src="getImage(secondImg)"
               class="scale-2"
               style="width: 100%; height: 100%;"
               alt=""
@@ -34,7 +34,24 @@
 
 <script>
 export default {
-  name: "doublepicks-component"
+  name: "doublepicks-component",
+  props: {
+    clothes: Array,
+  },
+  data() {
+    return {
+      firstImg: this.clothes[0].imagePath,
+      secondImg: this.clothes[1].imagePath
+    }
+  },
+  methods: {
+     getImage(imagePath) {
+      // let imageurl = imagePath.replace(/[a-z]+([0-9]?)+.jpg/i, "");
+      //   let image = imagePath.replace(/[a-z]+\//gi, "");
+      // console.log(post.imagePath);
+      return require(`@/assets/${imagePath}`);
+    },
+  },
 }
 </script>
 
@@ -46,8 +63,8 @@ export default {
   align-items: center;
 }
 .con {
-  width: 50%;
-  height: 100%;
+      width: 45%;
+    height: auto;
   overflow: hidden;
   padding: 2%;
 }
@@ -56,6 +73,7 @@ export default {
   overflow: hidden;
   width: 100%;
   height: 100%;
+  border-radius: 7px;
 }
 
 .scale-2 {

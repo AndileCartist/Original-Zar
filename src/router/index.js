@@ -27,7 +27,7 @@ const routes = [
   {
     path: "/cart",
     name: "cart",
-    component: () => import("../components/Cart")
+    component: () => import("../pages/CartPage")
   },
   {
     path: "/connect/facebook/redirect",
@@ -50,9 +50,34 @@ const routes = [
     component: () => import("../pages/ResetPassword")
   },
   {
-    path: "/women/all",
+    path: "/women/:id",
     name: "woman-page",
     component: () => import("../pages/WomanPage")
+  },
+  {
+    path: "/men/:id",
+    name: "men-page",
+    component: () => import("../pages/MenPage")
+  },
+  {
+    path: "/kids/:id",
+    name: "kids-page",
+    component: () => import("../pages/KidsPage")
+  },
+  {
+    path: "/brands/:id",
+    name: "brands-page",
+    component: () => import("../pages/BrandsPage")
+  },
+  {
+    path: "/search",
+    name: "search-page",
+    component: () => import("../pages/SearchPage")
+  },
+  {
+    path: "/checkout",
+    name: "checkout-page",
+    component: () => import("../pages/CheckoutPage")
   },
 ];
 
@@ -65,9 +90,7 @@ const router = new VueRouter({
     if (savedPosition) {
         return savedPosition;
     } else {
-      if (to.hash) {
-        return { selector: to.hash };
-      }
+            return { x: 0, y: 0, behavior: 'smooth' }
     }
     
   }

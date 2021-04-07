@@ -15,11 +15,11 @@
       @mouseleave="autoplay = true"
     >
       
-        <q-carousel-slide
-        :name="1"
-        :img-src="getImage('women/jackets/hoodies/hoodie3.jpg')"
-        
+        <q-carousel-slide class="q-pa-none"
+        :name="1"       
+        :img-src="getImage('women/jackets/hoodies/hoodie3.jpg')"      
       >
+    <!--  <img :src="getImage('women/jackets/hoodies/hoodie3.jpg')" alt="" style="height:100%; width: 100%;">   -->
        <div class="absolute-center custom-caption">
           <div class="text-h">Lady's Hoodies</div>
           <q-btn outline class="grey-1 q-pa-xs btn-text"  glossy label=" Take Me There " />
@@ -30,7 +30,7 @@
 
       <q-carousel-slide
         :name="2"
-        :img-src="
+        :img-src=" 
           getImage(
             'women/dresses/dress-3.jpg'
           )
@@ -87,17 +87,19 @@
 
 <script>
 export default {
+  props: {
+   // data: Array
+  },
   data() {
     return {
       slide: 1,
-      autoplay: true,
+      autoplay: true,  
+      img1: this.data.image[0].url.split("/").slice(7).join('/'),
+      img2: this.data.image[1].url.split("/").slice(7).join('/')
     };
   },
   methods: {
     getImage(imagePath) {
-      // let imageurl = imagePath.replace(/[a-z]+([0-9]?)+.jpg/i, "");
-      //   let image = imagePath.replace(/[a-z]+\//gi, "");
-      // console.log(post.imagePath);
       return require(`@/assets/${imagePath}`);
     },
   },

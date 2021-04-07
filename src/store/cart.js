@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
 
 const state = () => ({
-  items: []
+  items: [],
+  //cookie: JSON.parse(Cookies.get('cart'))
 })
 
  const mutations = {
@@ -16,10 +17,13 @@ const state = () => ({
         quantity: 1,
         ...item
       })
+     // console.log(JSON.parse(Cookies.get('cart')))
+      Cookies.set('cart', state.items)
+      console.log(JSON.parse(Cookies.get('cart')))
     } else {
       record.quantity++
     }
-    Cookies.set('cart', state.items)
+   
   },
   remove(state, item) {
     const record = state.items.find(i => i.id === item.id)
@@ -30,11 +34,12 @@ const state = () => ({
       const index = state.items.findIndex(i => i.id === item.id)
       state.items.splice(index, 1)
     }
+    
     Cookies.set('cart', state.items)
   },
   emptyList(state) {
     state.items = []
-    Cookies.set('cart', state.items)
+    Cookies.remove('cart')
   }
 }
 
@@ -44,7 +49,7 @@ const state = () => ({
   },
   price: state => {
     return state.items.reduce(
-      (accumulator, item) => accumulator + item.price * item.quantity,
+      (accumulator, item) => Math.round(((accumulator + (item.price * item.quantity)) + Number.EPSILON) * 100)/100 ,
       0
     )
   },

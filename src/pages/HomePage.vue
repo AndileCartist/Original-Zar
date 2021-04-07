@@ -2,14 +2,15 @@
   <div id="home-page">
     <carousel-component />
     <category-header :header="'Men\'s Random Picks'" />
-    <picks-component />
-    <doublepicks-component />
+    <picks-component :clothes="menClothes" />
+    <doublepicks-component :clothes="men"  />
+    
     <category-header :header="'Lady\'s Random Picks'" />
-    <picks-component />
-    <doublepicks-component />
+    <picks-component :clothes="womenClothes" />
+    <doublepicks-component :clothes="women" />
     <category-header :header="'Kids\'s Random Picks'" />
-    <picks-component />
-    <doublepicks-component />
+    <picks-component :clothes="kidsClothes"/>
+    <doublepicks-component :clothes="kids" />
     <!-- <div v-if="makeUrl.length" class="small-container">
       <div v-bind:key="cloth.index" v-for="cloth in clothes">
         <div
@@ -43,7 +44,10 @@ import CarouselComponent from "../components/CarouselComponent.vue";
 import CategoryHeader from "../components/CategoryHeader.vue";
 import PicksComponent from "../components/PicksComponent.vue";
 import DoublepicksComponent from  "../components/DoublepicksComponent.vue";
-
+import { mapGetters } from "vuex";
+import axios from "axios";
+const apiUrl = process.env.API_URL || "http://localhost:1337";
+//import  { CldImage } from "cloudinary-vue";
 export default {
   name: "home-page",
   components: {
@@ -51,59 +55,61 @@ export default {
     CategoryHeader,
     PicksComponent,
     DoublepicksComponent,
+    
   },
   data() {
     return {
       links: ["woman", "men", "sjhsajh", "sdgstydj"],
-      clothes: [],
+      carousel: [],
+      doublePicks: [],
       url: [],
-      men: [],
+      men: [{imagePath: 'men/jay-mullings-AhGIGeYoaNc-unsplash.jpg'}, {imagePath: 'men/favour-otunji-nk2dbZ9bhHY-unsplash.jpg'}],
+      women: [{imagePath: 'women/dresses/dress-wom.jpg'}, {imagePath: 'women/jeans/pants/jean-wom.jpg'}],
+      kids: [{imagePath: 'kids/formalWear/kayan-baby-msq6ZTvManw-unsplash.jpg'}, {imagePath: 'kids/jackets/sweats/sweater-kid.jpg'}]
     };
   },
   computed: {
     increms() {
       return this.$store.state.count;
     },
-    makeUrl() {
-      // let newArray = this.clothes.map(item => { return {...item}});
-      // console.log(newArray);
-      for (let cloth of this.clothes) {
-        // console.log(cloth.image[0].url);
-
-        this.$set(
-          cloth,
-          "imagePath",
-          `http://localhost:1337${cloth.image[0].url}`
-        );
-        console.log(`http://localhost:1337${cloth.image[0].url}`);
-      }
-      return this.clothes;
-    },
+    ...mapGetters(["menClothes", "kidsClothes", "womenClothes"]),
+   
   },
   mounted() {
-    fetch("http://localhost:1337/clothes")
-      .then((res) => res.json())
-      .then((data) => {
-        this.clothes = data;
-      });
-    /*
-      fetch("http://localhost:1337/men")
-      .then((res) => res.json())
-      .then((data) => {
-        this.men = data;
-      });*/
+    this.getCarousel();
+    this.getDoublePicks();
   },
 
   methods: {
     increment() {
       this.$store.commit("increment");
-      console.log(this.$store.state.count);
+  //    console.log(this.$store.state.count);
+    },
+    async getCarousel() {
+      try {
+        this.loading = true;
+        const { data } = await axios.get(`${apiUrl}/carousels`);
+        this.carousel = data;
+      } catch (err) {
+        this.loading = false;
+        alert(err.message || "An error occurred.");
+      }
+    },
+    async getDoublePicks() {
+      try {
+        this.loading = true;
+        const { data } = await axios.get(`${apiUrl}/double-picks`);
+        this.doublePicks = data;
+      } catch (err) {
+        this.loading = false;
+        alert(err.message || "An error occurred.");
+      }
     },
   },
 };
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 table {
   border: 3px solid slateblue;
   border-radius: 5px;
