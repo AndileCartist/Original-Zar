@@ -1,30 +1,37 @@
-import Cookies from 'js-cookie'
 
  const state = {
-    user: null
+    user: null,
  }
 
  const mutations = {
   setUser(state, user) {
     state.user = user
-    Cookies.set('user', user)
+   // localStorage.setItem("user", user);    
   },
+
   logout(state) {
     state.user = null
-    Cookies.set('user', null)
+    localStorage.removeItem('user');
   }
 }
 
  const getters = {
   userName(state) {
-   return state.user.username
+   return state.user.user.username
   }, 
+  getToken(state) {
+    return state.user.jwt
+  },
   userLogged (state) {
-    return state.user.confirmed
+    return state.user.user.confirmed
   },
   userData () {
     return state.user
-  }
+  },
+  userEmail () {
+    return state.user.user.email
+  },
+
 }
 
 export default {

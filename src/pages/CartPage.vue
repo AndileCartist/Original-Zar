@@ -20,17 +20,24 @@
 
       <div
         class="basket-product"
-        :class="{ baskettwo: test[index]}"
+        :class="{ baskettwo: test[index] }"
         v-for="(item, index) in items"
         :key="item.id"
       >
         <div class="item">
           <div class="product-image">
-            <img
-              :src="getImage(item.imagePath)"
-              :alt="item.alt"
+            <cld-image
               class="product-frame"
-            />
+              cloudName="dz3ubwuhu"
+              :publicId="item.image[0].url.split('/').slice(7).join('/')"
+              dpr="auto"
+              responsive="width"
+              width="auto"
+              loading="lazy"
+            >
+              <cld-placeholder type="blur"> </cld-placeholder>
+            </cld-image>
+           
           </div>
           <div class="product-details">
             <h6>
@@ -46,12 +53,20 @@
             <p>
               <strong>{{ item.color[0] }}</strong>
             </p>
-            <h4 class="missing-items" v-if="test[index]">{{recentData[index].value.data.available}} is available</h4>
+            <h4 class="missing-items" v-if="test[index]">
+              {{ quantityLeft[index] }} is available
+            </h4>
           </div>
         </div>
         <div class="price">{{ item.price }}</div>
         <div class="quantity">
-          <button class="cart-btn" @click="remove(item)">
+          <button
+            class="cart-btn"
+            @click="
+              remove(item);
+              clearQty();
+            "
+          >
             <span class="cart-font">-</span>
           </button>
           <div class="quantity-field">{{ item.quantity }}</div>
@@ -87,30 +102,49 @@
 
 <script>
 import { mapMutations, mapGetters } from "vuex";
-import Cookies from "js-cookie";
+import { CldImage, CldPlaceholder } from "cloudinary-vue";
 import axios from "axios";
 const apiUrl = process.env.API_URL || "http://localhost:1337";
 
 export default {
   name: "cart-page",
+  components: {
+    CldImage,
+    CldPlaceholder,
+  },
   data() {
     return {
       data: [],
       error: "",
       itemMissing: false,
       test: [],
-      recentData: []
+      recentData: [],
     };
   },
   created() {
     this.getCartItems();
   },
   computed: {
-    ...mapGetters(["items", "price", "numberOfItems"]),
+    ...mapGetters(["items", "price", "numberOfItems", "userData"]),
+    quantityLeft() {
+      let presentData = [...this.recentData];
+      let arr = [];
+      if (presentData.length > 0) {
+        presentData.forEach((data) => {
+          data.status === "rejected"
+            ? arr.push(0)
+            : arr.push(data.value.data.available);
+        });
+      }
+      return arr;
+    },
   },
   methods: {
     ...mapMutations(["add", "remove", "setItems"]),
 
+    clearQty() {
+      this.test = [];
+    },
     addNotification() {
       this.itemMissing = true;
       setTimeout(this.toggleItemMissing, 2900);
@@ -124,10 +158,10 @@ export default {
     },
     getCartItems() {
       //  let cart2 = [];
-      let cart = Cookies.get("cart");
-      console.log(cart)
-      if (this.numberOfItems < 1 && cart !== undefined) {
-        console.log(JSON.parse(cart))
+      let cart = localStorage.getItem("cart");
+      //  console.log(cart)
+      if (this.numberOfItems < 1 && cart !== undefined && cart !== null) {
+        //   console.log(JSON.parse(cart))
         this.setItems(JSON.parse(cart));
       }
     },
@@ -136,89 +170,63 @@ export default {
     },
     checkout() {
       let items = this.items;
-      //  let unavailableItems = [];
       let urls = [];
-      //  let itemMissingQty = 0;
-      for (let i = 0; i < items.length; i++) {
-        urls.push(
-          `${apiUrl}/${items[i].imagePath
-            .split("/")
-            .slice(0, 1)
-            .join("/")}/${items[i].id}`
-        );
-        if (items.length === urls.length) {
-          const tasks = urls.map((source) => axios.get(source));
-          Promise.allSettled(tasks).then((result) => {
-            this.recentData = result;
-            let unavailable = result.map((e, index) => {
-              if (e.status == "rejected") {
-                return index;
-              } else {
-                return -1;
-              }
-            });
-
-            let qtycheck = result.map((a, index) => {
-              if (a.status !== "rejected") {
-                return a.value.data.available >= items[index].quantity
-                  ? -1
-                  : index;
-              } else {
-                return -1;
-              }
-            });
-
-            let qtymiss = qtycheck.filter((e) => e >= 0).length;
-            let missing = unavailable.filter((e) => e >= 0).length;
-
-            if (qtymiss > 0 || missing > 0) {
-              //  console.log(qtycheck.includes(-1), unavailable.includes(-1))
-              for (let i = 0; i < qtycheck.length; i++) {
-                if (qtycheck[i] > unavailable[i] ) {
-                  unavailable[i] = qtycheck[i];
-                }
-              }
-              this.test = unavailable.map(a => {return a >= 0? true: false})
-              this.addNotification();
-              console.log("qty ", qtycheck);
-              console.log("unavailable ", unavailable);
-            } else {
-              this.$router.push({ name: "checkout-page" });
-            }
-          });
-        }
-
-        /* axios
-          .get(
+      if (this.userData === null) {
+        this.$router.push("signin");
+      } else {
+        for (let i = 0; i < items.length; i++) {
+          urls.push(
             `${apiUrl}/${items[i].imagePath
               .split("/")
               .slice(0, 1)
               .join("/")}/${items[i].id}`
-          )
-          .then((response) => {          
-            if ( response.data.available >= items[i].quantity) {
-               databaseItems.push(response.data);
-            }           
-            else {
-              itemMissingQty++
+          );
+          if (items.length === urls.length) {
+            const tasks = urls.map((source) => axios.get(source));
+            Promise.allSettled(tasks).then((result) => {
+              this.recentData = result;
+              let unavailable = result.map((e, index) => {
+                if (e.status == "rejected") {
+                  return index;
+                } else {
+                  return -1;
+                }
+              });
+
+              let qtycheck = result.map((a, index) => {
+                if (a.status !== "rejected") {
+                  return a.value.data.available >= items[index].quantity
+                    ? -1
+                    : index;
+                } else {
+                  return -1;
+                }
+              });
+
+              let qtymiss = qtycheck.filter((e) => e >= 0).length;
+              let missing = unavailable.filter((e) => e >= 0).length;
+
+              if (qtymiss > 0 || missing > 0) {
+                //  console.log(qtycheck.includes(-1), unavailable.includes(-1))
+
+                for (let i = 0; i < qtycheck.length; i++) {
+                  if (qtycheck[i] > unavailable[i]) {
+                    unavailable[i] = qtycheck[i];
+                  }
+                }
+                this.test = unavailable.map((a) => {
+                  return a >= 0 ? true : false;
+                });
+                this.addNotification();
+                //      console.log("qty ", qtycheck);
+                //        console.log("unavailable ", unavailable);
+              } else {
+                this.$router.push({ name: "checkout-page" });
               }
-          })
-          .catch((error) => {
-            this.error = error.message;
-            console.log(this.error);
-          });
-          if( i === items.length - 1) {
-            console.log(i)
-            console.log(itemMissingQty)
-            console.log(databaseItems)
-            itemMissingQty > 0? this.addNotification():this.$router.push({ name: "checkout-page" }) 
-          }*/
+            });
+          }
+        }
       }
-      /*
-      return this.error === ""
-        ? this.$router.push({ name: "checkout-page" })
-        : this.addNotification();
-      //return this.$router.push({ name: "checkout-page" });   */
     },
   },
 };
@@ -231,17 +239,17 @@ a {
   text-decoration: none;
 }
 .baskettwo {
-  background-color: rgb(209, 206, 206)  !important;
+  background-color: rgb(209, 206, 206) !important;
   z-index: 5;
 }
 
 .missing-items {
-      float: right;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border: 1px rgb(49, 49, 49) solid;
-    border-radius: 14px;
-    font-size: 250%;
+  float: right;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 1px rgb(49, 49, 49) solid;
+  border-radius: 14px;
+  font-size: 250%;
 }
 
 strong {
@@ -332,6 +340,7 @@ main {
   padding-top: 80px;
   flex-direction: column;
   align-items: center;
+  min-height: 650px;
 }
 
 .basket,
@@ -466,7 +475,7 @@ li.subtotal:before {
   text-align: center;
 }
 .cart-btn {
-  background-color: rgb(129, 82, 107); /* Green */
+  background-color: rgb(103 103 103);
   border: none;
   color: white;
 
@@ -485,11 +494,10 @@ li.subtotal:before {
   align-items: center;
 }
 .cart-btn:hover {
-  background-color: rgb(104, 71, 89);
+  background-color: rgb(124, 124, 124);
 }
-.cart-btn:active,
-.cart-btn:focus {
-  background-color: rgb(129, 82, 107);
+.cart-btn:active {
+  background-color: rgb(103 103 103);
 }
 
 .cart-font {
@@ -543,8 +551,23 @@ li.subtotal:before {
   align-items: center;
 }
 .no-items > h6 {
-  font-size: 50px;
+  font-size: 16px;
   font-weight: 800;
+}
+@media screen and (min-width: 360px) {
+  .no-items > h6 {
+    font-size: 18px;
+  }
+}
+@media screen and (min-width: 520px) {
+  .no-items > h6 {
+    font-size: 25px;
+  }
+}
+@media screen and (min-width: 992px) {
+  .no-items > h6 {
+    font-size: 50px;
+  }
 }
 @media screen and (max-width: 640px) {
   aside,

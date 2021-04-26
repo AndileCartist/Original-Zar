@@ -1,16 +1,16 @@
 <template>
   <div id="home-page">
-    <carousel-component />
+    <carousel-component :data="carousel" />
     <category-header :header="'Men\'s Random Picks'" />
     <picks-component :clothes="menClothes" />
-    <doublepicks-component :clothes="men"  />
+    <doublepicks-component :clothes="dMen"  />
     
     <category-header :header="'Lady\'s Random Picks'" />
     <picks-component :clothes="womenClothes" />
-    <doublepicks-component :clothes="women" />
+    <doublepicks-component :clothes="dWomen" />
     <category-header :header="'Kids\'s Random Picks'" />
     <picks-component :clothes="kidsClothes"/>
-    <doublepicks-component :clothes="kids" />
+    <doublepicks-component :clothes="dKids" />
     <!-- <div v-if="makeUrl.length" class="small-container">
       <div v-bind:key="cloth.index" v-for="cloth in clothes">
         <div
@@ -63,9 +63,9 @@ export default {
       carousel: [],
       doublePicks: [],
       url: [],
-      men: [{imagePath: 'men/jay-mullings-AhGIGeYoaNc-unsplash.jpg'}, {imagePath: 'men/favour-otunji-nk2dbZ9bhHY-unsplash.jpg'}],
-      women: [{imagePath: 'women/dresses/dress-wom.jpg'}, {imagePath: 'women/jeans/pants/jean-wom.jpg'}],
-      kids: [{imagePath: 'kids/formalWear/kayan-baby-msq6ZTvManw-unsplash.jpg'}, {imagePath: 'kids/jackets/sweats/sweater-kid.jpg'}]
+      dMen: [],
+      dWomen: [],
+      dKids: []
     };
   },
   computed: {
@@ -73,6 +73,7 @@ export default {
       return this.$store.state.count;
     },
     ...mapGetters(["menClothes", "kidsClothes", "womenClothes"]),
+    
    
   },
   mounted() {
@@ -99,7 +100,9 @@ export default {
       try {
         this.loading = true;
         const { data } = await axios.get(`${apiUrl}/double-picks`);
-        this.doublePicks = data;
+        this.dMen = data.filter(men => {return men.grouping === 'men'})
+        this.dWomen = data.filter(women => {return women.grouping === 'women'})
+        this.dKids = data.filter(kids => {return kids.grouping === 'kids'})
       } catch (err) {
         this.loading = false;
         alert(err.message || "An error occurred.");

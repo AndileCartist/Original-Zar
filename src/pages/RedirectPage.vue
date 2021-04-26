@@ -1,25 +1,9 @@
 <template>
   <div class="background">
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span></span>
-    <span></span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span>OriginalZar</span>
-    <span></span>
-    <span></span>
-    <span></span>
-
+    <div class="sheet">
+      <div class="loader">Loading...</div>
+      <h6>Loading...</h6>
+    </div>
   </div>
 </template>
 
@@ -33,6 +17,7 @@ export default {
       email: "",
       password: "",
       loading: false,
+      user: "",
     };
   },
   async created() {
@@ -47,6 +32,7 @@ export default {
   methods: {
     async handleSubmit() {
       this.loading = true;
+
       let provider = this.$route.path.split("/")[2];
       axios
         .get(
@@ -55,38 +41,17 @@ export default {
         )
         .then((response) => {
           // Handle success.
-
-          this.$store.commit("setUser", response.data.user);
+         
+          this.$store.commit("setUser", response.data);
+          localStorage.setItem("user", JSON.stringify(response.data))          
+          this.$router.go(-3);
           this.loading = false;
-          this.$router.go(-2);
-
-          //   console.log(response);
-          console.log(this.$route.path.split("/")[2]);
-          console.log("User profile", response.data.user);
-          console.log("User token", response.data.jwt);
-        })
+        }) 
         .catch((error) => {
           // Handle error.
-          console.log(this.$route.path.split("/")[2]);
           this.loading = false;
           console.log("couldn't get access token because :", error.response);
         });
-
-      /*
-      try {
-        this.loading = true
-        const response = await strapi.register(
-          this.username,
-          this.email,
-          this.password
-        )
-        this.loading = false
-        this.setUser(response.user)
-        this.$router.push('/')
-      } catch (err) {
-        this.loading = false
-        alert(err.message || 'An error occurred.')
-      }*/
     },
   },
   computed: {
@@ -98,50 +63,132 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="css" scoped>
 body {
   margin: 0;
   overflow: hidden;
 }
 
 .background {
-  width: 100vw;
-  height: 800px;
-  background: #424242;
+  width: 100%;
+  height: 600px;
+  background-color: #e6e6e6;
+  opacity: 0.4;
+  background-image: radial-gradient(#4c4c4e 1px, transparent 1px),
+    radial-gradient(#4c4c4e 1px, #e6e6e6 1px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
 }
-
-$particleSize: 0vmin;
-$animationDuration: 8s;
-$amount: 20;
-.background span {
-  width: $particleSize;
-  height: $particleSize;
-  border-radius: $particleSize;
-  backface-visibility: hidden;
-  position: absolute;
-  animation-name: move;
-  animation-duration: $animationDuration;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  $colors: (#b194e2, #e45a84, #bd4545);
-  @for $i from 1 through $amount {
-    &:nth-child(#{$i}) {
-      color: nth($colors, random(length($colors)));
-      top: random(70) * 1%;
-      left: random(100) * 1%;
-      animation-duration: (random($animationDuration * 10) / 10) * 1s + 10s;
-      animation-delay: random(($animationDuration + 10s) * 10) / 10 * -1s;
-      transform-origin: (random(50) - 25) * 1vw (random(50) - 25) * 1vh;
-      $blurRadius: (random() + 0.5) * $particleSize * 0.5;
-      $x: if(random() > 0.5, -1, 1);
-      box-shadow: ($particleSize * 2 * $x) 0 $blurRadius currentColor;
-    }
+.sheet {
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+}
+.sheet > h6 {
+  text-align: center;
+  color: whitesmoke;
+  position: relative;
+  top: 40%;
+}
+.loader {
+  color: #fafafa;
+  font-size: 120px;
+  text-indent: -9999em;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  margin: 72px auto;
+  position: relative;
+  top: 35%;
+  left: 45%;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load6 1.5s infinite ease, round 1.5s infinite ease;
+  animation: load6 1.5s infinite ease, round 1.5s infinite ease;
+  margin: 0;
+}
+@-webkit-keyframes load6 {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em,
+      -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em,
+      -0.297em -0.775em 0 -0.477em;
+  }
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
   }
 }
-
-@keyframes move {
+@keyframes load6 {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em,
+      -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em,
+      -0.297em -0.775em 0 -0.477em;
+  }
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
   100% {
-    transform: translate3d(0, 0, 1px) rotate(360deg);
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+}
+@-webkit-keyframes round {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes round {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 </style>

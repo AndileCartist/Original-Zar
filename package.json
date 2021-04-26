@@ -15,16 +15,21 @@
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.0",
+    "cloudinary": "^1.25.1",
     "cloudinary-vue": "^1.2.0",
     "core-js": "^3.6.4",
     "flutterwave-vue-v3": "^1.0.5",
     "js-cookie": "^2.2.1",
+    "lodash": "^4.17.21",
+    "lru-cache": "4.1.2",
     "quasar": "^1.0.0",
     "vue": "^2.6.11",
     "vue-router": "^3.4.9",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "webpack": "^5.31.0"
   },
   "devDependencies": {
+    "@babel/runtime-corejs2": "^7.13.10",
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-eslint": "~4.3.0",
     "@vue/cli-service": "~4.3.0",

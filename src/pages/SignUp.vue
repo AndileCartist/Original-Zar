@@ -31,6 +31,7 @@
           color="white"
           size="0.1rem"
           inset
+          style="width: 80%;"
         />
       </div>
       <div class="content">
@@ -297,7 +298,7 @@ $amount: 20;
   z-index: 10;
   width: 260px;
   margin: auto;
-  background: #293650;
+  background: #424242;
   border-radius: 4px;
 }
 .top-logo-2 {
@@ -309,7 +310,7 @@ $amount: 20;
 .background {
   width: 100%;
   height: 600px;
-  background: #424242;
+  background: #383333;
   padding-top: 50px;
   overflow: hidden;
 }

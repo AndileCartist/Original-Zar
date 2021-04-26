@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie'
 
 const state = () => ({
   items: [],
@@ -8,22 +7,20 @@ const state = () => ({
  const mutations = {
   setItems(state, items) {
     state.items = items
+    localStorage.setItem("cart", JSON.stringify(state.items));
   },
   add(state, item) {
     const record = state.items.find(i => i.id === item.id)
-
     if (!record) {
       state.items.push({
         quantity: 1,
         ...item
       })
-     // console.log(JSON.parse(Cookies.get('cart')))
-      Cookies.set('cart', state.items)
-      console.log(JSON.parse(Cookies.get('cart')))
+     
     } else {
       record.quantity++
     }
-   
+    localStorage.setItem("cart", JSON.stringify(state.items));
   },
   remove(state, item) {
     const record = state.items.find(i => i.id === item.id)
@@ -34,12 +31,11 @@ const state = () => ({
       const index = state.items.findIndex(i => i.id === item.id)
       state.items.splice(index, 1)
     }
-    
-    Cookies.set('cart', state.items)
+    localStorage.setItem("cart", JSON.stringify(state.items));
   },
   emptyList(state) {
     state.items = []
-    Cookies.remove('cart')
+    localStorage.removeItem("cart", JSON.stringify(state.items));
   }
 }
 

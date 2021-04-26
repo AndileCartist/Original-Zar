@@ -4,7 +4,7 @@
         <ul>
             <li v-for="link in links"
               :key="link"  class="wrap">
-                 <router-link :to="link.dest" tag="div" class="ripple" :style="{'textDecoration': 'none', 'color': ' #880e4f', 'width': '259px'}">{{ link.name}}  </router-link>  
+                 <router-link :to="link.dest" tag="div" class="ripple" :style="{'textDecoration': 'none', 'color': ' rgb(53 47 51)', 'width': '259px','font-size': '20px'}">{{ link.name}}  </router-link>  
             </li>
         </ul>          
         
@@ -29,7 +29,7 @@ ul {
     margin: 0 5px;
     padding-left: 10px;
     background: inherit;
-    color: #880e4f;
+    color: #413e3f;
     text-decoration: none
 }
 li {
@@ -42,7 +42,7 @@ li {
 }
 
 li:hover {
-  background: #e69fc4;
+  background: #a7a1a4;
 }
 .wrap {
   display: -webkit-box;
@@ -61,7 +61,7 @@ li:hover {
 }
 
 .ripple:active {
-  background-color: #ebc9da;
+  background-color: #8f8188;
   background-size: 100%;
   transition: background 0s;
 } 

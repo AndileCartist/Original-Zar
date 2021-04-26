@@ -2,7 +2,10 @@
   <div class="row">
     <div class="col-75">
       <div class="container">
-        <form action="/action_page.php">
+        <div :class="{ show: inputMissing }" class="snackbar">
+          Required Input Field(s) Empty
+        </div>
+        <form>
           <div class="row">
             <div class="col-50">
               <div class="scene scene-card">
@@ -21,14 +24,24 @@
                       <div class="body-flex">
                         <label for="fname">Contact No.</label>
                         <div>
-                          <input required type="text" name="firstname" />
+                          <input
+                            type="text"
+                            name="firstname"
+                            required
+                            v-model="billingAddress.contact"
+                          />
                         </div>
                       </div>
 
                       <div class="body-flex">
                         <label for="adr">Billing Address</label>
                         <div>
-                          <input type="text" name="address" />
+                          <input
+                            v-model="billingAddress.street"
+                            type="text"
+                            required
+                            name="address"
+                          />
                         </div>
                       </div>
                       <div class="body-flex" style="margin-top: 5px;">
@@ -39,7 +52,11 @@
                       <div class="body-flex">
                         <label for="adr"></label>
                         <div>
-                          <input type="text" name="address" />
+                          <input
+                            v-model="billingAddress.secondStreet"
+                            type="text"
+                            name="secondaddress"
+                          />
                         </div>
                       </div>
                       <div class="body-flex" style="margin-top: 5px;">
@@ -48,10 +65,16 @@
                       </div>
                       <div class="address-grid">
                         <div></div>
-                        <input type="text" />
+                        <input
+                          type="text"
+                          v-model="billingAddress.city"
+                          required
+                        />
                         <label for="size">
-                          <select style="font-size: 18px;">
-                            <option>select</option>
+                          <select
+                            v-model="billingAddress.province"
+                            style="font-size: 18px;"
+                          >
                             <option value="Gauteng">Gauteng</option>
                             <option value="KwaZulu-Natal">KwaZulu-Natal</option>
                             <option value="Gauteng">Western Cape</option>
@@ -69,9 +92,17 @@
                       </div>
                       <div class="address-grid">
                         <div></div>
-                        <input type="text" />
+                        <input
+                          type="text"
+                          v-model="billingAddress.code"
+                          required
+                        />
                         <label for="size">
-                          <select style="font-size: 18px;">
+                          <select
+                            v-model="billingAddress.country"
+                            required
+                            style="font-size: 18px;"
+                          >
                             <option>South Africa</option>
                           </select>
                         </label>
@@ -82,117 +113,98 @@
                     </form>
                   </div>
                   <div class="card-face card-face-back">
-                    <div class="head-flex">
-                      <div style="width: 85%;">
-                        <h6>Shipping Information</h6>
+                    <form>
+                      <div class="head-flex">
+                        <div style="width: 85%;">
+                          <h6>Shipping Information</h6>
+                        </div>
+                        <img class="logo" src="../assets/index.svg" />
                       </div>
-                      <img class="logo" src="../assets/index.svg" />
-                    </div>
-                    <hr
-                      style="color: #565454; width: 95%; margin-bottom: 30px"
-                    />
-                    <div class="body-flex">
-                      <label for="fname">Contact No.</label>
-                      <div>
-                        <input type="text" name="firstname" />
+                      <hr
+                        style="color: #565454; width: 95%; margin-bottom: 30px"
+                      />
+                      <div class="body-flex">
+                        <label for="fname">Contact No.</label>
+                        <div>
+                          <input
+                            type="text"
+                            name="contact"
+                            v-model="shippingAddress.contact"
+                          />
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="body-flex">
-                      <label for="adr">Shipping Address</label>
-                      <div>
-                        <input type="text" name="address" />
+                      <div class="body-flex">
+                        <label for="adr">Shipping Address</label>
+                        <div>
+                          <input
+                            type="text"
+                            name="address"
+                            v-model="shippingAddress.street"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div class="body-flex" style="margin-top: 5px;">
-                      <div style="width: 55%;margin-left: 8%;"></div>
-                      <p class="input-hint">street address</p>
-                    </div>
+                      <div class="body-flex" style="margin-top: 5px;">
+                        <div style="width: 55%;margin-left: 8%;"></div>
+                        <p class="input-hint">street address</p>
+                      </div>
 
-                    <div class="body-flex">
-                      <label for="adr"></label>
-                      <div>
-                        <input type="text" name="address" />
+                      <div class="body-flex">
+                        <label for="adr"></label>
+                        <div>
+                          <input
+                            type="text"
+                            name="address"
+                            v-model="shippingAddress.secondStreet"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div class="body-flex" style="margin-top: 5px;">
-                      <div style="width: 55%;margin-left: 8%;"></div>
-                      <p class="input-hint">2nd street address(optionally)</p>
-                    </div>
-                    <div class="address-grid">
-                      <div></div>
-                      <input type="text" />
-                      <label for="size">
-                        <select style="font-size: 18px;">
-                          <option>select</option>
-                          <option value="Gauteng">Gauteng</option>
-                          <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-                          <option value="Gauteng">Western Cape</option>
-                          <option value="Eastern Cape">Eastern Cape</option>
-                          <option value="Free State">Free State</option>
-                          <option value="Limpopo">Limpopo</option>
-                          <option value="Mpumalanga">Mpumalanga</option>
-                          <option value="Northern Cape">Northern Cape</option>
-                          <option value="North West">North West</option>
-                        </select>
-                      </label>
-                      <div></div>
-                      <p>city</p>
-                      <p>province</p>
-                    </div>
-                    <div class="address-grid">
-                      <div></div>
-                      <input type="text" />
-                      <label for="size">
-                        <select style="font-size: 18px;">
-                          <option>South Africa</option>
-                        </select>
-                      </label>
-                      <div></div>
-                      <p>code</p>
-                      <p>country</p>
-                    </div>
+                      <div class="body-flex" style="margin-top: 5px;">
+                        <div style="width: 55%;margin-left: 8%;"></div>
+                        <p class="input-hint">2nd street address(optionally)</p>
+                      </div>
+                      <div class="address-grid">
+                        <div></div>
+                        <input type="text" v-model="shippingAddress.city" />
+                        <label for="size">
+                          <select
+                            v-model="shippingAddress.province"
+                            style="font-size: 18px;"
+                          >
+                            <option value="Gauteng">Gauteng</option>
+                            <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                            <option value="Gauteng">Western Cape</option>
+                            <option value="Eastern Cape">Eastern Cape</option>
+                            <option value="Free State">Free State</option>
+                            <option value="Limpopo">Limpopo</option>
+                            <option value="Mpumalanga">Mpumalanga</option>
+                            <option value="Northern Cape">Northern Cape</option>
+                            <option value="North West">North West</option>
+                          </select>
+                        </label>
+                        <div></div>
+                        <p>city</p>
+                        <p>province</p>
+                      </div>
+                      <div class="address-grid">
+                        <div></div>
+                        <input type="text" v-model="shippingAddress.code" />
+                        <label for="size">
+                          <select
+                            v-model="shippingAddress.country"
+                            style="font-size: 18px;"
+                          >
+                            <option>South Africa</option>
+                          </select>
+                        </label>
+                        <div></div>
+                        <p>code</p>
+                        <p>country</p>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
-
-              <!--     <h3>Billing Address</h3>
-              <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-              <input
-                type="text"
-                id="fname"
-                name="firstname"
-                placeholder="John M. Doe"
-              />
-              <label for="email"><i class="fa fa-envelope"></i> Email</label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                placeholder="john@example.com"
-              />
-              <label for="adr"
-                ><i class="fa fa-address-card-o"></i> Address</label
-              >
-              <input
-                type="text"
-                id="adr"
-                name="address"
-                placeholder="542 W. 15th Street"
-              />
-              <label for="city"><i class="fa fa-institution"></i> City</label>
-              <input type="text" id="city" name="city" placeholder="New York" />
-
-              <div class="row">
-                <div class="col-50">
-                  <label for="state">State</label>
-                  <input type="text" id="state" name="state" placeholder="NY" />
-                </div>
-                <div class="col-50">
-                  <label for="zip">Zip</label>
-                  <input type="text" id="zip" name="zip" placeholder="10001" />
-                </div>
-              </div>  -->
             </div>
           </div>
           <label>
@@ -206,46 +218,45 @@
           </label>
 
           <div class="pay-cont">
-            <flutterwave-pay-button
-              :tx_ref="reference"
-              :amount="20"
-              currency="ZAR"
-              payment_options="card,ussd"
-              redirect_url=""
-              class="class-name"
-              style=""
-              :meta="{ counsumer_id: '7898', consumer_mac: 'kjs9s8ss7dd' }"
-              :customer="{
-                name: 'Demo Customer  Name',
-                email: 'customer@mail.com',
-                phone_number: '0818450****',
-              }"
-              :customizations="{
-                title: 'Customization Title',
-                description: 'Customization Description',
-              }"
-              :callback="makePaymentCallback"
-              :onclose="closedPaymentModal"
+            <button
+              @click.prevent="
+                checkInput();
+                /*   createOrder();*/
+                updateClothes();
+              "
+              class="btn-c"
             >
-              Click To Pay
-            </flutterwave-pay-button>
-           
+              Payment
+            </button>
           </div>
         </form>
       </div>
     </div>
     <div class="col-25">
-      <div class="container">
+      <div class="container summary">
         <h4>
           Cart Summary
         </h4>
-        <p><a href="#">Product 1</a> <span class="price">$15</span></p>
-        <p><a href="#">Product 2</a> <span class="price">$5</span></p>
-        <p><a href="#">Product 3</a> <span class="price">$8</span></p>
-        <p><a href="#">Product 4</a> <span class="price">$2</span></p>
+        <div class="cart-summary-grid">
+          <p>Product</p>
+          <p>Quantity</p>
+          <p>price</p>
+        </div>
+        <div
+          v-for="(item, index) in items"
+          :key="index"
+          class="cart-summary-grid"
+        >
+          <p>{{ item.productName }}</p>
+          <p>{{ item.quantity }}</p>
+          <p>{{ item.price }}</p>
+        </div>
         <hr />
         <p>
-          Total <span class="price" style="color:black"><b>$30</b></span>
+          Total
+          <span class="price" style="color:black"
+            ><b>R {{ price }}</b></span
+          >
         </p>
       </div>
     </div>
@@ -255,15 +266,15 @@
 <script>
 //import Flutterwave from "../components/FlutterwaveModal.vue";
 // const flwKey = process.env.payment.VUE_APP_FLUTTERWAVE_TEST_KEY;
-//import axios from "axios";
-//const apiUrl = process.env.API_URL || "http://localhost:1337";
+import axios from "axios";
+const apiUrl = process.env.API_URL || "http://localhost:1337";
 import { mapMutations, mapGetters } from "vuex";
-//import paystack from "./";
 
 export default {
   name: "Checkout-Page",
   components: {
     //  paystack,
+    //Flutterwave
   },
   data() {
     return {
@@ -272,29 +283,44 @@ export default {
       email: "andilemkhizekhabazela@gmail.com",
       PUBLIC_KEY: "FLWPUBK_TEST-22a4bcfebeaf537a6156354940b6a40a-X",
       checked: true,
-      /*  isProduction: false,
-      flwKey: "FLWPUBK_TEST-22a4bcfebeaf537a6156354940b6a40a-X",
-      amount: 120,
-      currency: "ZAR",
-      country: "SA",
-      customer: {
-        name: "Andile mkhize",
-        email: "andilemkeys@gmail.com",
+      inputMissing: false,
+      over: "",
+      update: "",
+      street: "",
+      orders: "",
+      billingAddress: {
+        contact: "g",
+        street: "g",
+        secondStreet: "",
+        city: "g",
+        province: "g",
+        code: "g",
+        country: "g",
       },
-      customizations: {
-        title: "OriginalZar",
-        description: "Payment for car service",
+      shippingAddress: {
+        contact: "",
+        street: "",
+        secondStreet: "",
+        city: "",
+        province: "",
+        code: "",
+        country: "",
       },
-      paymentMethod: "",
-      callback: function(data) {
-        console.log(data);
-      },
-      close: function() {
-        console.log("yooh");
-      },*/
     };
   },
   computed: {
+    syncAddress: {
+      get: function() {
+        return this.shippingAddress;
+      },
+      // setter
+      set: function() {
+        return this.checked
+          ? (this.shippingAddress = this.billingAddress)
+          : null;
+      },
+    },
+
     reference() {
       let text = "";
       let possible =
@@ -303,26 +329,246 @@ export default {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
       return text;
     },
-    ...mapGetters(["items", "price", "numberOfItems"]),
+    ...mapGetters(["items", "price", "numberOfItems", "getToken", "userEmail"]),
   },
   created() {},
   methods: {
-     payViaService() {
-      this.payWithFlutterwave(this.paymentData) 
-    } ,
-    ...mapMutations(["add", "remove", "setItems"]),
+    checkInput() {
+      let firstAddress = this.billingAddress;
+      let secondAddress = this.shippingAddress;
+      let fArr = Object.values(firstAddress);
+      fArr.splice(2, 1);
+      let first = fArr.map((e) => {
+        return e === "";
+      });
 
+      let sArr = Object.values(secondAddress);
+      sArr.splice(2, 1);
+      let second = sArr.map((e) => {
+        return e === "";
+      });
+
+      if (this.checked) {
+        if (first.includes(true)) {
+          console.log(fArr);
+          this.addNotification();
+          return true;
+        }
+      } else if (!this.checked) {
+        if (first.includes(true) && second.includes(true)) {
+          this.addNotification();
+          return true;
+        }
+      } else {
+        return false;
+      }
+    },
+    populateOversold(over) {
+      over.forEach((req) => {
+        let json = JSON.stringify({ ...req });
+        axios
+          .post(
+            `${apiUrl}/oversolds`,
+            {
+              items: json,
+            },
+            {
+              headers: { Authorization: `Bearer ${this.getToken}` },
+            }
+          )
+          .catch((err) => {
+            return console.log(err.message);
+          });
+      });
+    },
+    populateOutOfStock(over) {
+      over.forEach((req) => {
+        let json = JSON.stringify({ ...req });
+        axios
+          .post(
+            `${apiUrl}/out-of-stock`,
+            {
+              items: json,
+            },
+            {
+              headers: { Authorization: `Bearer ${this.getToken}` },
+            }
+          )
+          .catch((err) => {
+            return console.log(err.message);
+          });
+      });
+    },
+    createOrder() {
+      if (!this.checkInput()) {
+        axios
+          .post(
+            `${apiUrl}/orders`,
+            {
+              amount: this.price,
+              order: JSON.stringify(this.items),
+              address: JSON.stringify(this.billingAddress),
+              date: new Date(),
+              email: this.userEmail,
+              shippingAddress: JSON.stringify(this.shippingAddress),
+            },
+            {
+              headers: { Authorization: `Bearer ${this.getToken}` },
+            }
+          )
+          .catch((err) => {
+            return console.log(err.message);
+          });
+      }
+    },
+    deleteEntries(over) {
+      const tasks = over.map((source) =>
+        axios.delete(
+          `${apiUrl}/${source.imagePath
+            .split("/")
+            .slice(0, 1)
+            .join("/")}/${source.id}`,
+          {
+            headers: { Authorization: `Bearer ${this.getToken}` },
+          }
+        )
+      );
+      Promise.allSettled(tasks).catch((err) => {
+        return err.message;
+      });
+    },
+    updater(arr, over) {
+      const tasks = arr.map((source) => {
+        console.log(source.available);
+        axios
+          .put(
+            `${apiUrl}/${source.imagePath
+              .split("/")
+              .slice(0, 1)
+              .join("/")}/${source.id}`,
+            {
+              available: source.available - source.qty,
+            },
+            {
+              headers: { Authorization: `Bearer ${this.getToken}` },
+            }
+          )
+          .catch((err) => {
+            return err.message;
+          });
+      });
+      Promise.allSettled(tasks)
+        .then((results) => {
+          results.forEach((e, index) => {
+            if (e.status === "rejected") {
+              over.push({
+                item: { ...arr[index] },
+                oversoldQty: arr[index].quantity,
+              });
+            }
+          });
+        })
+        .catch((err) => {
+          return err.message;
+        });
+    },
+    updateClothes() {
+      let items = this.items;
+      let urls = [];
+      let oversold = [];
+      let updateable = [];
+      let outOfStock = [];
+
+      for (let i = 0; i < items.length; i++) {
+        urls.push(
+          `${apiUrl}/${items[i].imagePath
+            .split("/")
+            .slice(0, 1)
+            .join("/")}/${items[i].id}`
+        );
+        if (items.length === urls.length) {
+          const tasks = urls.map((source) => axios.get(source));
+          Promise.allSettled(tasks).then((result) => {
+            result.forEach((e, index) => {
+              if (e.status === "rejected") {
+                oversold.push({
+                  ...items[index],
+                  oversoldQty: items[index].quantity,
+                });
+              } else {
+                if (items[index].quantity > e.value.data.available) {
+                  oversold.push({
+                    ...items[index],
+                    oversoldQty: items[index].quantity - e.value.data.available,
+                  });
+                } else if (items[index].quantity === e.value.data.available) {
+                  outOfStock.push({
+                    ...items[index],
+                  });
+                }
+              }
+            });
+            result.forEach((x, index) => {
+              if (x.status !== "rejected") {
+                if (x.value.data.available >= items[index].quantity) {
+                  updateable.push({
+                    ...x.value.data,
+                    qty: items[index].quantity,
+                  });
+                }
+              }
+            });
+            console.log("oversold ", oversold);
+            console.log("outofstock ", outOfStock);
+            console.log("update ", updateable);
+            // updates collection from data on above arrays  && updates oversold array not collection
+            //  this.updater(updateable, oversold)
+            // delete oversold products  and out of stock one
+
+            //  this.deleteEntries(oversold)
+            //  this.deleteEntries(outOfStock)
+
+            // send unavailable products into their respective collections
+
+            //  this.populateOversold(oversold)
+
+            //  this.populateOutOfStock(outOfStock)
+            this.$router.push({ name: "google-redirect" });
+          });
+        }
+      }
+    },
+    addNotification() {
+      this.inputMissing = true;
+      setTimeout(this.toggleItemMissing, 2900);
+    },
+    toggleItemMissing() {
+      this.inputMissing = false;
+    },
+    ...mapMutations(["add", "remove", "setItems"]),
     makePaymentCallback(response) {
       console.log("Payment callback", response);
     },
     closedPaymentModal() {
       console.log("payment modal is closed");
     },
+    generateReference() {
+      let date = new Date();
+      return date.getTime().toString();
+    },
   },
 };
 </script>
 
 <style lang="css" scoped>
+.summary > h4 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.cart-summary-grid {
+  display: grid;
+  grid-template-columns: 3.5fr 3.5fr 3fr;
+}
 .address-grid {
   display: grid;
   grid-template-columns: 2.9fr 2.2fr 2.2fr;
@@ -334,6 +580,7 @@ export default {
   text-align: start;
   margin-top: 7px;
 }
+
 .address-grid > div {
   width: 100%;
 }
@@ -511,6 +758,14 @@ span.price {
   border-radius: 3px;
 }
 
+@media screen and (max-width: 500px) {
+  .scene {
+    width: 100%;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
 .card {
   width: 100%;
   height: 630px;
@@ -588,5 +843,70 @@ button {
 .pay-cont {
   display: flex;
   justify-content: center;
+}
+.snackbar {
+  visibility: hidden;
+
+  background-color: #f33232;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 10px;
+  position: fixed;
+  z-index: 2500;
+  left: -100%;
+  right: -100%;
+  top: 0px;
+  font-size: 17px;
+}
+
+.snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    top: 0;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    top: 0px;
+    opacity: 1;
+  }
+  to {
+    top: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    top: 0px;
+    opacity: 1;
+  }
+  to {
+    top: 0;
+    opacity: 0;
+  }
 }
 </style>

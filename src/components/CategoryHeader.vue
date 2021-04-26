@@ -1,6 +1,6 @@
 <template>
   <div class="q-ma-lg  row wrap justify-center items-center content-center">
-          <q-separator color="orange" size="0.2rem" inset /> 
+          <q-separator color="orange" size="0.2rem" inset style="width: 100%;" /> 
             <h4  class="q-ma-xs header-size category-font "  >{{ header }}</h4>  
        </div>
 </template>

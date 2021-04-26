@@ -32,16 +32,14 @@ library.add(
   faGoogle
 );
 Vue.config.productionTip = false;
+Vue.use(Cloudinary, {
+  configuration: { cloudName: "dz3ubwuhu" },
+  components: ["CldImage"],
+});
+Vue.use(Flutterwave, {
+  publicKey: "FLWPUBK_TEST-22a4bcfebeaf537a6156354940b6a40a-X",
+});
 
-Vue.use(
-  Cloudinary,
-  {
-    configuration: { cloudName: "dz3ubwuhu" },
-    components: ["CldImage"],
-  },
-  Flutterwave,
-  { publicKey: "FLWPUBK_TEST-22a4bcfebeaf537a6156354940b6a40a-X" }
-);
 
 new Vue({
   render: (h) => h(App),

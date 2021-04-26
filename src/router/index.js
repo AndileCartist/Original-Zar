@@ -31,12 +31,17 @@ const routes = [
   },
   {
     path: "/connect/facebook/redirect",
-    name: "redirect",
+    name: "facebook-redirect",
     component: () => import("../pages/RedirectPage")
   },
   {
     path: "/connect/google/redirect",
-    name: "redirect",
+    name: "google-redirect",
+    component: () => import("../pages/RedirectPage")
+  },
+  {
+    path: "/connect/twitter/redirect",
+    name: "twitter-redirect",
     component: () => import("../pages/RedirectPage")
   },
   {
@@ -78,6 +83,16 @@ const routes = [
     path: "/checkout",
     name: "checkout-page",
     component: () => import("../pages/CheckoutPage")
+  },
+  {
+    path: "/terms",
+    name: "terms-page",
+    component: () => import("../pages/TermsPage")
+  },
+  {
+    path: "/privacy",
+    name: "privacy-page",
+    component: () => import("../pages/PrivacyPage")
   },
 ];
 

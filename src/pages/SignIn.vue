@@ -31,6 +31,7 @@
           color="white"
           size="0.1rem"
           inset
+          style="width: 80%;"
         />
       </div>
       <div class="content">
@@ -38,11 +39,11 @@
           <font-awesome-icon :icon="['fab', 'facebook-square']" />
           <div class="btn-text">Facebook</div>
         </a>
-        <a href="#" class="twitter btn">
+        <a href="https://3f5d9cba376a.ngrok.io/connect/twitter" class="twitter btn">
           <font-awesome-icon :icon="['fab', 'twitter-square']" />
           <div class="btn-text"> Twitter</div>
         </a>
-        <a href="#" class="google btn">
+        <a href="http://localhost:1337/connect/google" class="google btn">
           <font-awesome-icon :icon="['fab', 'google']" />
           <div class="btn-text">Google</div>
         </a>
@@ -63,60 +64,6 @@
           >
         </div>  -->
     </div>
-      <form  autocomplete="off" @submit.stop.prevent="handleSubmit">
-
-         <div class="header">
-          <div class="header-con">
-            <h6>Sign in using</h6>
-            <q-separator class="q-mb-md" color="white" size="0.1rem" inset />
-            <div class="header-content">
-              <a href="https://7b82f34e55f8.ngrok.io/connect/facebook" class="btn btn-facebook"
-                ><i class="fa fa-facebook"></i> Facebook</a
-              >
-              <a href="#" class="btn btn-twitter"
-                ><i class="fa fa-twitter"></i> Twitter</a
-              >
-              <a href="http://localhost:1337/connect/google" class="btn btn-google-plus"
-                ><i class="fa fa-google-plus"></i> Google</a
-              >
-            </div>
-          </div>
-        </div>   
-  <input id="email"
-            v-model="email"
-            type="email"
-            autofocus="true"
-            placeholder="Enter your email"
-            required> 
-  <input   id="password"
-            v-model="password"
-            label="password"
-            type="password"
-            class="form-control"
-            autofocus="true"
-            placeholder="Enter your password"
-            required> 
-       <p class="text-center text-white mt-3 q-mt-md">
-          forgot password?
-          <router-link :to="{ name: 'forgot-password' }">
-            recover
-          </router-link>
-        </p>
-
-      <button
-          :disabled="loading"
-          type="submit"
-          class=""
-        > 
-          Submit
-        </button>
-          <p class="text-center text-white mt-3 q-mt-md">
-          No account yet
-          <router-link :to="{ name: 'signup' }" tag="a">
-            Register
-          </router-link>
-        </p> 
-      </form>  
   </div>
 
 </template>
@@ -148,7 +95,7 @@ export default {
         });
 
         this.loading = false;
-        this.$store.commit("setUser", data.user);
+        this.$store.commit("setUser", data);
         //   this.setUser(data.user)
         this.$router.go(-1);
       } catch (err) {
@@ -298,7 +245,7 @@ $amount: 20;
   z-index: 10;
   width: 260px;
   margin: auto;
-  background: #293650;
+  background: #424242;
   border-radius: 4px;
 }
 .top-logo-2 {
@@ -310,7 +257,7 @@ $amount: 20;
 .background {
   width: 100%;
   height: 600px;
-  background: #424242;
+  background: #383333;
   padding-top: 50px;
   overflow: hidden;
 }

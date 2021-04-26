@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh LpR fff">
+  <q-layout class="layout" view="hHh LpR fff">
     <q-header
       transition="fade"
       animated
@@ -93,7 +93,6 @@
           </div>
 
           <div v-if="userData !== null">
-            <h5 class="user-name">{{ userName }}</h5>
             <q-btn
               outline
               @click="logout"
@@ -133,12 +132,10 @@
               <div
                 v-for="(post, index) in women.slice(0, 3)"
                 v-bind:item="post"
-                v-bind:index="index"
-                v-bind:key="post.imagePath"
+                v-bind:key="index"
               >
                 <card-component
                   :item="post"
-                  :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
                 />
@@ -155,12 +152,10 @@
               <div
                 v-for="(post, index) in men.slice(0, 3)"
                 v-bind:item="post"
-                v-bind:index="index"
-                v-bind:key="post.imagePath"
+                v-bind:key="index"
               >
                 <card-component
                   :item="post"
-                  :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
                 />
@@ -177,12 +172,10 @@
               <div
                 v-for="(post, index) in kids.slice(0, 3)"
                 v-bind:item="post"
-                v-bind:index="index"
-                v-bind:key="post.imagePath"
+                v-bind:key="index"
               >
                 <card-component
                   :item="post"
-                  :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
                 />
@@ -198,12 +191,10 @@
               <div
                 v-for="(post, index) in getBestBrands"
                 v-bind:item="post"
-                v-bind:index="index"
-                v-bind:key="post.imagePath"
+                v-bind:key="index"
               >
                 <card-component
                   :item="post"
-                  :imagePath="getImage(post.imagePath)"
                   :price="post.price"
                   :productName="post.productName"
                 />
@@ -391,7 +382,6 @@
 import CardComponent from "../components/CardComponent.vue";
 import TabLinks from "../components/TabLinks.vue";
 import axios from "axios";
-import Cookies from "js-cookie";
 const apiUrl = process.env.API_URL || "http://localhost:1337";
 import { mapGetters, mapMutations } from "vuex";
 
@@ -459,7 +449,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userData", "userName"]),
+    ...mapGetters(["userData"]),
 
     getBestBrands() {
       let men = this.men.reduce(
@@ -482,7 +472,7 @@ export default {
 
   async created() {
     try {
-      //this.getUserData();
+      this.getUserData();
       this.fetchWomenData();
       // this.women = await this.getFemaleImages();
       this.fetchMenData();
@@ -500,12 +490,13 @@ export default {
   methods: {
     ...mapMutations(["logout", "setUser"]),
     getUserData() {
-      //  let cart2 = [];
-      let user = Cookies.get("user");
-      if (this.userData === null) {
-        if (user !== null) {
-          this.setUser(JSON.parse(user));
-        }
+      if (
+        this.userData === null &&
+        localStorage.getItem("user") !== "undefined" &&
+        localStorage.getItem("user") !== null
+      ) {
+        let user = JSON.parse(localStorage.getItem("user"));
+        this.$store.commit("setUser", user);
       }
     },
     async getSearch() {
@@ -605,6 +596,13 @@ export default {
 </script>
 
 <style>
+@media screen and (max-width: 330px) {
+  .layout {
+     width: 340px !important;
+  }
+ 
+}
+
 .center {
   justify-content: center;
 }
@@ -803,7 +801,9 @@ export default {
   margin-right: 12px;
   margin-bottom: 5px;
 }
-.imail-input {
+.email-input {
+  display: flex !important;
+  justify-content: center !important;
   height: 46px;
   width: 240px;
   margin: auto;
@@ -827,6 +827,21 @@ export default {
     margin-left: 0;
   }
 }
+@media only screen and (min-width: 320px) {
+  .top-logo-2 {
+    width: 76px;
+    left: 6%;
+    top: -10%;
+  }
+}
+@media only screen and (min-width: 355px) {
+  .top-logo-2 {
+    width: 80px;
+    position: relative;
+    left: 9%;
+    top: -5%;
+  }
+}
 @media only screen and (min-width: 406px) {
   .top-logo-2 {
     width: 105px;
@@ -834,10 +849,20 @@ export default {
     left: 2%;
   }
 }
+@media only screen and (min-width: 626px) {
+  .top-logo-2 {
+    width: 160px;
+    position: relative;
+    left: 9%;
+    top: -5%;
+  }
+}
 
 @media only screen and (min-width: 1028px) {
-  .imail-input {
+  .email-input {
     width: 320px;
+    display: flex;
+    justify-content: center;
   }
 }
 .wrapper {
@@ -880,7 +905,7 @@ export default {
   left: 0;
   width: 0;
   height: 100%;
-  background: rgb(136, 14, 79);
+  background: rgb(162, 161, 165);
   transition: all 0.45s;
 }
 

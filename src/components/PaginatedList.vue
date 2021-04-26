@@ -1,15 +1,13 @@
-<template >
+<template>
   <div>
     <div class="grid-container">
       <div v-for="post in paginatedData" :item="post" :key="post.uni">
         <card-component
           :item="post"
-          :imagePath="getImage(post.imagePath)"
           :price="post.price"
           :productName="post.productName"
         />
       </div>
-     
     </div>
     <div class="btn-group">
       <button
@@ -68,12 +66,6 @@ export default {
     prevPage() {
       this.pageNumber--;
     },
-    getImage(imagePath) {
-      // let imageurl = imagePath.replace(/[a-z]+([0-9]?)+.jpg/i, "");
-      //   let image = imagePath.replace(/[a-z]+\//gi, "");
-      // console.log(post.imagePath);
-      return require(`@/assets/${imagePath}`);
-    },
   },
   computed: {
     pageCount() {
@@ -92,16 +84,15 @@ export default {
 
 <style lang="css" scoped>
 .grid-container {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 316px;
-  grid-gap: 10px;
-
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 @media only screen and (min-width: 600px) {
   .grid-container {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 316px;
     justify-items: center;
@@ -109,20 +100,13 @@ export default {
 }
 @media only screen and (min-width: 1024px) {
   .grid-container {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 316px;
-    justify-items: center;
   }
 }
 @media only screen and (min-width: 1440px) {
   .grid-container {
-    display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 316px;
     gap: 40px;
-    grid-template-areas: ". . .";
-    justify-items: center;
   }
 }
 
@@ -155,18 +139,18 @@ export default {
   transform: skewX(-15deg);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25);
   border-radius: 5px;
-  background: #93cede;
+  background: rgb(103 103 103);
   background: linear-gradient(
     to bottom,
-    rgb(231, 135, 186) 0%,
-    rgb(136, 14, 79) 100%
+    rgb(117, 116, 117) 0%,
+    rgb(103, 103, 103) 100%
   );
 }
 .skewed-button:hover:after {
   background: linear-gradient(
     to bottom,
-    rgb(231, 135, 186) 100%,
-    rgb(136, 14, 79) 0%
+    rgb(129, 128, 129) 100%,
+    rgb(124, 124, 124) 0%
   );
 }
 .skewed-button:active,

@@ -3,12 +3,7 @@
     <div :class="{ show: itemAdded }" class="snackbar">
       Added Item to Cart...
     </div>
-    <div
-      class="card-face"
-      :style="style"
-      @mouseover="mouseOver"
-      @mouseout="mouseOver"
-    >
+    <div class="card-face" @mouseover="mouseOver" @mouseout="mouseOver">
       <cld-image
         cloudName="dz3ubwuhu"
         :publicId="src"
@@ -17,7 +12,10 @@
         width="auto"
         height="300"
         crop="scale"
-      />
+        loading="lazy"
+      >
+        <cld-placeholder type="blur"> </cld-placeholder>
+      </cld-image>
       <!-- <img src="../assets/men/jackets/hoodies/hoodie1.jpg" alt="" style="width: inherit; height: inherit;">   -->
       <div
         class="spec-con"
@@ -47,11 +45,47 @@
       <span @click="viewCloth()" class="close">&times;</span>
       <div class="grid-container-main">
         <div class="preview-img item-1">
-          <img :src="getImage(img)" />
-          <img :src="getImage(img)" />
+          <cld-image
+            style="width: 70%; height: auto;margin: 3px;border: whitesmoke solid 1px;"
+            cloudName="dz3ubwuhu"
+            :publicId="src"
+            dpr="auto"
+            responsive="width"
+            quality="auto"
+            crop="fill"
+            fetchFormat="auto"
+            loading="lazy"
+          >
+            <cld-placeholder type="blur"> </cld-placeholder>
+          </cld-image>
+          <cld-image
+            style="width: 70%; height: auto;margin: 3px;border: whitesmoke solid 1px;"
+            cloudName="dz3ubwuhu"
+            :publicId="src"
+            dpr="auto"
+            responsive="width"
+            quality="auto"
+            crop="fill"
+            fetchFormat="auto"
+            loading="lazy"
+          >
+            <cld-placeholder type="blur"> </cld-placeholder>
+          </cld-image>
         </div>
         <div class="img-con item-2">
-          <img :src="getImage(img)" />
+          <cld-image
+            cloudName="dz3ubwuhu"
+            :publicId="src"
+            dpr="auto"
+            responsive="width"
+            width="100%"
+            quality="auto"
+            crop="fill"
+            fetchFormat="auto"
+            loading="lazy"
+          >
+            <cld-placeholder type="blur"> </cld-placeholder>
+          </cld-image>
         </div>
 
         <div class="item-3">
@@ -132,11 +166,12 @@
 
 <script>
 import { mapMutations } from "vuex";
-import  { CldImage } from "cloudinary-vue";
+import { CldImage, CldPlaceholder } from "cloudinary-vue";
 export default {
   name: "cardComponent",
   components: {
-    CldImage
+    CldImage,
+    CldPlaceholder,
   },
   props: {
     item: Object,
@@ -161,7 +196,10 @@ export default {
       sale: this.item.onSale,
       description: this.item.description.split("."),
       img: this.item.imagePath,
-      src: this.item.image[0].url.split("/").slice(7).join('/'),
+      src: this.item.image[0].url
+        .split("/")
+        .slice(7)
+        .join("/"),
       itemAdded: false,
       quantity: 0,
     };
@@ -221,7 +259,7 @@ button {
 }
 .card-face {
   width: 300px;
-  height: 300px;
+  height: 303px;
   border: 2px solid rgb(194, 201, 200);
   border-radius: 3px;
   position: relative;
@@ -249,7 +287,7 @@ button {
   box-shadow: 0 -2px 2px rgba(0, 0, 0, 0.6);
   width: inherit;
   position: relative;
-  top: -125px;
+  top: -116px;
 }
 
 .spec-con h5 {
@@ -487,7 +525,7 @@ button {
   margin-bottom: 20px;
 }
 .img-con {
-  display: flex;
+  /*display: flex; */
   justify-content: center;
 }
 .img-con > img {
